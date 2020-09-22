@@ -1,0 +1,15 @@
+.p {
+    display: flex;
+    align-items: center;
+}
+
+.p .icons {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.p .icons>* {
+    margin-left: 10px;
+}
