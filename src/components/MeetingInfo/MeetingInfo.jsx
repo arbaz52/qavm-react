@@ -9,7 +9,7 @@ import {FaGripLines} from 'react-icons/fa'
 const MeetingInfo = ({_id, title}) => {
     const { showHeader, setShowHeader } = useContext(HeaderContext)
     const getInvitationLink = () => {
-        navigator.clipboard.writeText("http://localhost:3000/meeting/"+_id)
+        navigator.clipboard.writeText("https://qavm.herokuapp.com/meeting/"+_id)
         toast.info("Invitation link copied to clipboard", {
             position: 'bottom-right'
         })

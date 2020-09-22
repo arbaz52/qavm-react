@@ -13,6 +13,8 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import { } from './../../App'
 import { GrFormClose } from "react-icons/gr"
+import { Field, Form, Formik } from 'formik'
+import * as yup from 'yup'
 
 const EVENT_JOINING_MEETING = "joining-meeting"
 const EVENT_JOINED_MEETING = "joined-meeting"
@@ -247,30 +249,51 @@ const MeetingPage = (props) => {
         }
     }
 
+    const searchInitialValues = {
+        search: ""
+    }
+    const searchParticipants = ({ search }) => {
+        console.log(search)
+    }
+    const searchValidationSchema = yup.object({
+        search: yup.string().required()
+    })
+
     return (
         meeting ? (
             <div className='content'>
                 <div className='left'>
                     {/* <h3 className="px-4 py-2">participants</h3> */}
-                    <form className="search px-4 py-2 mt-1">
-                        <InputGroup>
-                            <Input type="search" placeholder="Search for participants..." bsSize="sm" />
-                            <InputGroupAddon addonType="append" size="sm">
-                                <Button color="primary" size="sm">
-                                    <AiOutlineSearch />
-                                </Button>
-                            </InputGroupAddon>
-                        </InputGroup>
-                    </form>
-                    <div className="participants px-4 py-2">
+                    <Formik
+                        initialValues={searchInitialValues}
+                        onSubmit={searchParticipants}
+                        validationSchema={searchValidationSchema}>
+                        {
+                            ({values, errors}) => {
+                                return <>
+                                    <Form className="search px-4 py-2 mt-1">
+                                        <InputGroup>
+                                            <Field as={Input} name="search" type="search" placeholder="Search for participants..." bsSize="sm" />
+                                            <InputGroupAddon addonType="append" size="sm">
+                                                <Button color="primary" size="sm">
+                                                    <AiOutlineSearch />
+                                                </Button>
+                                            </InputGroupAddon>
+                                        </InputGroup>
+                                    </Form>
+                                    <div className="participants px-4 py-2">
 
-                        <ParticipantsList participants={
-                            participants.filter(_p => {
-                                // return search_p.username ? _p.username.includes(search) : true
-                                return true
-                            })
-                        } />
-                    </div>
+                                        <ParticipantsList participants={
+                                            participants.filter(_p => {
+                                                return values.search ? _p.username ? _p.username.includes(values.search) : false : true
+                                                // return true
+                                            })
+                                        } />
+                                    </div>
+                                </>
+                            }
+                        }
+                    </Formik>
                     <div className="local px-5 py-3">
                         <LocalParticipant {...localParticipant} toggleAudio={toggleAudio} toggleVideo={toggleVideo} />
                     </div>
